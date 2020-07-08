@@ -25,7 +25,7 @@ bot.on('message', msg=>{
                 case 'add':
                     var raw = saveNote(msg.author.tag, args);
                     notes[msg.author.tag].push(raw);
-                    msg.reply("Added the new note!");
+                    msg.reply("Added your new note!");
                     break;
                 case 's':
                 case 'show':
