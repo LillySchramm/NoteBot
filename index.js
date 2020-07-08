@@ -3,7 +3,7 @@ const { saveNote, loadAllNotes } = require('./data');
 const bot = new Discord.Client();
 const data = new require('./data');
 
-const token = 'NzMwMTAwNzcwODkyMDIxNzgw.XwSlhA.DEd7saZuZ7CJQbTFXd4TVrj_1HE';
+
 
 const PREFIX = ">";
 
@@ -52,5 +52,5 @@ bot.on('message', msg=>{
     }
 })
 
-bot.login(token);
+bot.login(process.env.token);
 
