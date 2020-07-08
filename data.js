@@ -23,10 +23,12 @@ module.exports = {
                     if(n[raw[0]] == undefined){                
                         
                         n[raw[0]] = [];
-                        n[raw[0]] = [raw[1]];                       
+                        n[raw[0]] = [raw[1]];
+                        n[raw[0]].push(file);    
                         
                     }else{
                         n[raw[0]].push(raw[1]);
+                        n[raw[0]].push(file);
                     }                    
                     
                   });                  
@@ -51,6 +53,13 @@ module.exports = {
 
         return raw;
         
+    },
+
+    removeNote: function (file){
+        fs.unlink('notes/' + file, function (err) {
+            if (err) throw err;            
+            console.log('File deleted!');
+        });  
     }
 
 } 

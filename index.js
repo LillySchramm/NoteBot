@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { saveNote, loadAllNotes } = require('./data');
+const { saveNote, loadAllNotes, removeNote } = require('./data');
 const bot = new Discord.Client();
 const data = new require('./data');
 
@@ -14,7 +14,7 @@ bot.on('ready', () =>{
     console.log(notes);
 })
 
-bot.on('message', msg=>{
+bot.on('message', msg=>{    
     var args = msg.content.substring(PREFIX.length).split(" ");
 
     switch(args[0]){
@@ -23,17 +23,23 @@ bot.on('message', msg=>{
             switch(args[1]){
                 case 'a':
                 case 'add':
-                    var raw = saveNote(msg.author.tag, args);
-                    notes[msg.author.tag].push(raw);
-                    msg.reply("Added your new note!");
-                    break;
+                    if(args[2]){
+                        var raw = saveNote(msg.author.tag, args);
+                        notes[msg.author.tag].push(raw);
+                        msg.reply("Added your new note!");
+                        break;
+                    }else{
+                        msg.reply("Correct use: note add <a text>");
+                    }            
                 case 's':
-                case 'show':
-                    
+                case 'show':                    
+                    msg.reply("Searching for notes...");
                     if(notes[msg.author.tag]){
-                        for(var i = 0; i < notes[msg.author.tag].length; i++){
-                            msg.reply(i + ":  " + notes[msg.author.tag][i]);
-                        }                           
+                        let temp = "";
+                        for(var i = 0; i < notes[msg.author.tag].length / 2; i++){
+                            temp += i + ":  " + notes[msg.author.tag][i*2] + "\n";                            
+                        }
+                        msg.reply(temp);
                         
                     }else{
                         msg.reply("You do not have any notes open.");
@@ -43,14 +49,21 @@ bot.on('message', msg=>{
 
                 case 'r':
                 case 'remove':
-                    notes[msg.author.tag].splice(args[2], 1);
-                    msg.reply("Removed note NR." + args[2]);
-                    
+                    if(args[2]){
+                        let n = notes[msg.author.tag];
+                        removeNote(n[args[2] * 2 + 1]);                  
+                        notes[msg.author.tag].splice(args[2] * 2, 1);
+                        notes[msg.author.tag].splice(args[2] * 2, 1);                    
+                        msg.reply("Removed note NR." + args[2]);  
+                    }else{
+                        msg.reply("Correct use: note remove <number>");
+                    }
+                                                    
             }    
             
         
     }
 })
 
-bot.login(process.env.token);
+bot.login("NzMwMTAwNzcwODkyMDIxNzgw.XwXE6g.crQbFt9Vgz4xJd9K8zkNcGdy3I8");
 
