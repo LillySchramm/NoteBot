@@ -1,10 +1,9 @@
 fs = require('fs');
 
 module.exports = {    
-    loadAllNotes: function (){
-        
-        n = {};        
-         fs.readdir("notes/", (err, files) => {
+    loadAll: function (t){        
+        var n = {};        
+         fs.readdir( t + "/", (err, files) => {
             //handling error
             if (err) {
                 return console.log('Unable to scan directory: ' + err);
@@ -13,8 +12,8 @@ module.exports = {
             //listing all files using forEach
             files.forEach((file) => {
                 
-                fs.readFile('notes/' + file, 'utf8', (err,data) => {
-                    console.log(4);
+                fs.readFile(t + '/' + file, 'utf8', (err,data) => {
+                    
                     if (err) {
                       return console.log(err);
                     }
@@ -38,25 +37,27 @@ module.exports = {
         return n;
     },
 
-    saveNote: function (user,note){
+    save: function (user, data, t){
 
         var raw = "";        
         
-        for(var i = 2; i < note.length; i++){
-            raw += note[i] + " ";            
+        for(var i = 2; i < data.length; i++){
+            raw += data[i] + " ";            
         }
 
-        fs.writeFile("notes/" + Date.now() +".txt", user + ">;$;<" + raw, function (err) {
+        var file_name = Date.now() +".txt";
+
+        fs.writeFile(t + "/" + file_name, user + ">;$;<" + raw, function (err) {
             if (err) throw err;
             console.log('File is created successfully.'); 
         });
 
-        return raw;
+        return [raw, file_name];
         
     },
 
-    removeNote: function (file){
-        fs.unlink('notes/' + file, function (err) {
+    remove: function (file, t){
+        fs.unlink(t + '/' + file, function (err) {
             if (err) throw err;            
             console.log('File deleted!');
         });  
