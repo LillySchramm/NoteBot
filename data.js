@@ -13,7 +13,7 @@ module.exports = {
             files.forEach((file) => {
                 
                 fs.readFile(t + '/' + file, 'utf8', (err,data) => {
-                    console.log(4);
+                    
                     if (err) {
                       return console.log(err);
                     }

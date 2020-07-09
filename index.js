@@ -29,10 +29,15 @@ bot.on('message', msg=>{
                     case 'add':
                         if(args[2]){
                             var raw = save(msg.author.tag, args, 'notes');
-                            if(notes[msg.author.tag]){
-                                notes[msg.author.tag].push(raw);
+                            if(notes[msg.author.tag] == undefined){                
+                        
+                                notes[msg.author.tag] = [];
+                                notes[msg.author.tag] = [raw[0]];
+                                notes[msg.author.tag].push(raw[1]);    
+                                
                             }else{
-                                notes[msg.author.tag] = raw;
+                                notes[msg.author.tag].push(raw[0]);
+                                notes[msg.author.tag].push(raw[1]);
                             }
                             
                             msg.reply("Added your new note!");
@@ -83,13 +88,41 @@ bot.on('message', msg=>{
                     case 's':
                         if(args[2] && args[3]){
                             msg.reply("Sending the notification to " + args[2]);
-                            save();
+                            args.shift()
+                            var raw = save(args[1], args, 'notifications');
+
+                            if(notifications[msg.author.tag] == undefined){                
+                        
+                                notifications[msg.author.tag] = [];
+                                notifications[msg.author.tag] = [raw[0]];
+                                notifications[msg.author.tag].push(raw[1]);    
+                                
+                            }else{
+                                notifications[msg.author.tag].push(raw[0]);
+                                notifications[msg.author.tag].push(raw[1]);
+                            }
                         }else{
                             msg.reply("Correct use: notification send <tartget> <message>");
                         }
                         break;
                     case 'get':
                     case 'g':
+                        var temp = notifications[msg.author.tag];
+                        if(temp == undefined){
+                            msg.reply("You do not have any notifications!");
+                        }else{
+                            var msg_string = "Here are your notifications:\n";                            
+                            
+                            for(var i = 0; i < temp.length/2; i ++){
+                                msg_string += temp[i*2] + "\n\n";
+                                remove(temp[i*2+1] ,'notifications');
+                            }                           
+
+                            msg.reply(msg_string);
+                        }
+
+                        notifications[msg.author.tag] = undefined;
+                        
                         break;
                     default:
                         msg.reply("Possible subcommands:\nnotification send <user> <some text>\nnotification get");
