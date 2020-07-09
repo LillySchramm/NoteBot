@@ -136,5 +136,5 @@ bot.on('message', msg=>{
     }
 })
 
-bot.login("NzMwMTAwNzcwODkyMDIxNzgw.XwXE6g.crQbFt9Vgz4xJd9K8zkNcGdy3I8");
+bot.login(process.env.token);
 
